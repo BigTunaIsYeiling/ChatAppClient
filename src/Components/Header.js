@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Avatar,
   Box,
   Divider,
   IconButton,
@@ -9,7 +10,6 @@ import {
   Toolbar,
 } from "@mui/material";
 // import { FiMenu } from "react-icons/fi";
-import { RiUserSettingsLine } from "react-icons/ri";
 import { AiOutlineSetting } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { useEffect, useRef, useState } from "react";
@@ -17,8 +17,8 @@ import { CustomTheme } from "../Theme";
 import img from "../logo.png";
 import useWindowSize from "../UseWindowHook";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { SetLogout } from "../ReduxSlices/User";
+import { useDispatch, useSelector } from "react-redux";
+import { SetLogout, userData } from "../ReduxSlices/User";
 export const Header = ({ setHeaderHeight }) => {
   const { fonts } = CustomTheme;
   const headRef = useRef();
@@ -40,6 +40,7 @@ export const Header = ({ setHeaderHeight }) => {
     setAnchorEl(null);
   };
   const dispatch = useDispatch();
+  const user = useSelector(userData);
   return (
     <Box sx={{ flexGrow: 1, position: "relative" }} ref={headRef} zIndex={1000}>
       <AppBar
@@ -73,7 +74,7 @@ export const Header = ({ setHeaderHeight }) => {
             aria-expanded={open ? "true" : undefined}
             onClick={handleClick}
           >
-            <RiUserSettingsLine color="white" />
+            {user && <Avatar src={user.avatar} />}
           </IconButton>
           <Menu
             anchorEl={anchorEl}

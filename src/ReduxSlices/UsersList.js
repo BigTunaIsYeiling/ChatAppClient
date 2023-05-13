@@ -7,6 +7,7 @@ const SERVER_URL = "http://localhost:5000";
 const initialState = {
   users: null,
   status: "idle",
+  ActiveUsers: null,
 };
 
 export const GetUsers = createAsyncThunk("users/get", async (_, thunkAPI) => {
@@ -25,15 +26,23 @@ const UsersListSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(GetUsers.fulfilled, (state, action) => {
       state.users = action.payload;
-      state.status="succeeded"
+      state.status = "succeeded";
     });
     builder.addCase(GetUsers.rejected, (state, action) => {
       state.users = null;
-      state.status="failed"
+      state.status = "failed";
     });
+  },
+  reducers: {
+    setActiveUsers: (state, action) => {
+      state.ActiveUsers = action.payload;
+      console.log(state.ActiveUsers);
+    },
   },
 });
 
 export const UsersListReducer = UsersListSlice.reducer;
+export const { setActiveUsers } = UsersListSlice.actions;
 export const status = (state) => state.UsersListReducer.status;
 export const users = (state) => state.UsersListReducer.users;
+export const ActiveUsers = (state) => state.UsersListReducer.ActiveUsers;

@@ -8,7 +8,21 @@ import { Header } from "./Components/Header";
 import { UsersList } from "./Components/UsersList";
 import { Getconversations } from "./ReduxSlices/ConversationSlice";
 import { getMessages } from "./ReduxSlices/MessagesSlice";
+import { UserId } from "./ReduxSlices/User";
+import { setActiveUsers } from "./ReduxSlices/UsersList";
+import { socket } from "./Socket";
 function App() {
+  const user = useSelector(UserId);
+  useEffect(() => {
+    user && socket.emit("addUser", user);
+    // eslint-disable-next-line
+  }, [user]);
+  useEffect(() => {
+    socket.on("getUsers", (data) => {
+      dispatch(setActiveUsers(data));
+    });
+    // eslint-disable-next-line
+  }, [socket]);
   const [headerHeight, setHeaderHeight] = useState(0);
   const isSigned = useSelector(isLoggedIn);
   const loaded = useSelector(isloading);
@@ -31,6 +45,15 @@ function App() {
   }, []);
   useEffect(() => {
     dispatch(getMessages());
+    // eslint-disable-next-line
+  }, []);
+  const ReceiveHandler = () => {
+    dispatch(Getconversations());
+    dispatch(getMessages());
+  };
+  useEffect(() => {
+    socket.on("receive-message", ReceiveHandler);
+    return () => socket.off("receive-message", ReceiveHandler);
     // eslint-disable-next-line
   }, []);
   return loaded ? (

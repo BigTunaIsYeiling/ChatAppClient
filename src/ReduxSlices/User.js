@@ -132,4 +132,4 @@ export const UserReducer = userSlice.reducer;
 export const isLoggedIn = (state) => state.UserReducer.isLoggedIn;
 export const userData = (state) => state.UserReducer.user;
 export const isloading = (state) => state.UserReducer.loaded;
-export const UserId = (state) => state.UserReducer.user.id;
+export const UserId = (state) => state.UserReducer.user?.id;

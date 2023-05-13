@@ -6,7 +6,7 @@ import { BsArrow90DegLeft } from "react-icons/bs";
 import { TbSend } from "react-icons/tb";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { users } from "../ReduxSlices/UsersList";
+import { ActiveUsers, users } from "../ReduxSlices/UsersList";
 import {
   AllMessages,
   MessagesStatus,
@@ -16,7 +16,9 @@ import {
 } from "../ReduxSlices/MessagesSlice";
 import { Getconversations } from "../ReduxSlices/ConversationSlice";
 import { UserId } from "../ReduxSlices/User";
+import { socket } from "../Socket";
 export const ChattingRoom = () => {
+  const [typingStatus, settypingStatus] = useState(false);
   const user = useSelector(UserId);
   const { fonts } = CustomTheme;
   const dispatch = useDispatch();
@@ -72,12 +74,48 @@ export const ChattingRoom = () => {
   });
   const sendMessageHandler = () => {
     dispatch(sendMessage({ text, conversationId: ChatId })).then(() => {
+      socket.emit("send-message", ReceiverId);
+      dispatch(getMessages());
+      dispatch(Getconversations());
+    });
+    setText("");
+  };
+  const getMessageSeen = () => {
+    dispatch(seenMessages(ChatId)).then(() => {
       dispatch(getMessages()).then(() => {
         dispatch(Getconversations());
       });
     });
-    setText("");
   };
+  useEffect(() => {
+    socket.on("receive-message", getMessageSeen);
+    return () => socket.off("receive-message", getMessageSeen);
+    // eslint-disable-next-line
+  }, []);
+  const OnlineUsers = useSelector(ActiveUsers);
+  const onTyping = () => {
+    socket.emit("typing", ReceiverId);
+  };
+  const handleTyping = () => {
+    settypingStatus(true);
+  };
+  useEffect(() => {
+    socket.on("typing", handleTyping);
+    return () => socket.off("typing", handleTyping);
+    // eslint-disable-next-line
+  }, []);
+  const onTStopyping = () => {
+    socket.emit("stopTyping", ReceiverId);
+  };
+  const handleStopTyping = () => {
+    settypingStatus(false);
+  };
+  useEffect(() => {
+    socket.on("stopTyping", handleStopTyping);
+    return () => socket.off("stopTyping", handleStopTyping);
+    // eslint-disable-next-line
+  }, []);
+  var typingtimer;
   return (
     <Box
       sx={{
@@ -126,6 +164,12 @@ export const ChattingRoom = () => {
                   }}
                 >
                   {receiver.username}
+                  <Box fontWeight={300} fontSize={"10px"}>
+                    {OnlineUsers &&
+                    OnlineUsers.some((user) => user.userId === ReceiverId)
+                      ? "online"
+                      : "offline"}
+                  </Box>
                 </Box>
               )}
             </Stack>
@@ -177,9 +221,18 @@ export const ChattingRoom = () => {
               value={text}
               onChange={(e) => setText(e.target.value)}
               onKeyDown={(e) => {
+                onTyping();
                 if (e.key === "Enter") {
+                  onTStopyping();
                   sendMessageHandler();
                 }
+                clearTimeout(typingtimer);
+              }}
+              onKeyUp={() => {
+                clearTimeout(typingtimer);
+                typingtimer = setTimeout(() => {
+                  onTStopyping();
+                }, 1000);
               }}
             />
             <IconButton onClick={sendMessageHandler}>
@@ -236,6 +289,22 @@ export const ChattingRoom = () => {
               </Box>
             </Stack>
           ))}
+        {typingStatus && (
+          <Box
+            bgcolor={"#1e1f22"}
+            padding={2}
+            sx={{
+              borderRadius: "10px 10px 10px 0",
+              fontFamily: fonts.arabic,
+              color: "white",
+              fontSize: "13px",
+              fontWeight: 500,
+            }}
+            alignSelf={"flex-start"}
+          >
+            {receiver.username} is typing...
+          </Box>
+        )}
       </Stack>
     </Box>
   );

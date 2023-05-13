@@ -7,13 +7,15 @@ import {
 } from "@mui/material";
 import { CustomTheme } from "../Theme";
 import { GoPrimitiveDot } from "react-icons/go";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Createconversation } from "../ReduxSlices/ConversationSlice";
 import { useNavigate } from "react-router-dom";
-export const User = ({ name, active, avatar, id }) => {
+import { ActiveUsers } from "../ReduxSlices/UsersList";
+export const User = ({ name, avatar, id }) => {
   const dispatch = useDispatch();
   const { fonts } = CustomTheme;
   const navigate = useNavigate();
+  const OnlineUsers = useSelector(ActiveUsers);
   return (
     <ListItem disablePadding sx={{ width: 240 }}>
       <ListItemButton
@@ -42,7 +44,13 @@ export const User = ({ name, active, avatar, id }) => {
           }}
           primary={name}
         />
-        <GoPrimitiveDot color={active ? "#38E54D" : "#777"} size={20} />
+        <GoPrimitiveDot
+          color={
+            // if  user is online then green else red
+            OnlineUsers&& OnlineUsers.some((user) => user.userId === id) ? "#38E54D" : "#777"
+          }
+          size={20}
+        />
       </ListItemButton>
     </ListItem>
   );

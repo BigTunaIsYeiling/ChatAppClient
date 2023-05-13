@@ -21,7 +21,6 @@ export const Conversations = () => {
     // eslint-disable-next-line
   }, [size.width]);
   const headRef = useRef();
-
   return (
     <Box
       sx={{
@@ -50,14 +49,14 @@ export const Conversations = () => {
           </Toolbar>
         </AppBar>
       </Box>
-      {conversationStatus !== "succeeded" ? (
+      {conversationsData === null ? (
         <>
           <ConversationSkeleton />
           <ConversationSkeleton />
           <ConversationSkeleton />
           <ConversationSkeleton />
         </>
-      ) : conversationsData.length > 0 ? (
+      ) :  conversationsData.length > 0 ? (
         <List
           sx={{
             width: "100%",
