@@ -11,7 +11,6 @@ import { getMessages } from "./ReduxSlices/MessagesSlice";
 import { UserId } from "./ReduxSlices/User";
 import { setActiveUsers } from "./ReduxSlices/UsersList";
 import { socket } from "./Socket";
-import { AddChat } from "./Components/AddChat";
 function App() {
   const user = useSelector(UserId);
   useEffect(() => {
@@ -77,7 +76,6 @@ function App() {
           }}
           direction={"row"}
         >
-          <AddChat />
           <Stack
             direction={"column"}
             display={{ xs: "none", md: "flex" }}

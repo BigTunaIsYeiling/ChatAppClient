@@ -268,7 +268,10 @@ export const ChattingRoom = () => {
                 bgcolor={"#1e1f22"}
                 padding={2}
                 sx={{
-                  borderRadius: "10px 10px 10px 0",
+                  borderRadius:
+                    user === message.sender
+                      ? "10px 10px 0px 10px"
+                      : "10px 10px 10px 0",
                   fontFamily: fonts.arabic,
                   color: "white",
                   fontSize: "13px",

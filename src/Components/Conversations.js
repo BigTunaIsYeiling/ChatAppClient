@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { Allconversations } from "../ReduxSlices/ConversationSlice";
 import { ConversationSkeleton } from "./ConversationSkeleton";
 import { NoConversations } from "./NoConversations";
+import { AddChat } from "./AddChat";
 export const Conversations = () => {
   const { fonts } = CustomTheme;
   const conversationsData = useSelector(Allconversations);
@@ -30,6 +31,7 @@ export const Conversations = () => {
         height: "100%",
       }}
     >
+      <AddChat />
       <Box sx={{ flexGrow: 1, zIndex: 1 }} ref={headRef}>
         <AppBar
           position="relative"
@@ -55,7 +57,7 @@ export const Conversations = () => {
           <ConversationSkeleton />
           <ConversationSkeleton />
         </>
-      ) :  conversationsData.length > 0 ? (
+      ) : conversationsData.length > 0 ? (
         <List
           sx={{
             width: "100%",
