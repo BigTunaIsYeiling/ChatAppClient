@@ -4,13 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import useWindowSize from "../UseWindowHook";
 import { Conversation } from "./Conversation";
 import { useSelector } from "react-redux";
-import { Allconversations, status } from "../ReduxSlices/ConversationSlice";
+import { Allconversations } from "../ReduxSlices/ConversationSlice";
 import { ConversationSkeleton } from "./ConversationSkeleton";
 import { NoConversations } from "./NoConversations";
 export const Conversations = () => {
   const { fonts } = CustomTheme;
   const conversationsData = useSelector(Allconversations);
-  const conversationStatus = useSelector(status);
   const [headerHeight, setHeaderHeight] = useState(0);
   const setHeight = () => {
     setHeaderHeight(headRef.current.clientHeight);
