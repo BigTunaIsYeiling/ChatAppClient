@@ -7,6 +7,7 @@ import img from "../logo.png";
 import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { SetLogin } from "../ReduxSlices/User";
+import { ToastContainer, toast } from "react-toastify";
 export const Login = () => {
   const { fonts } = CustomTheme;
   const [showpass, setpassinp] = useState(false);
@@ -22,7 +23,20 @@ export const Login = () => {
   };
   const dispatch = useDispatch();
   const handleSubmit = () => {
-    dispatch(SetLogin(LoginData));
+    dispatch(SetLogin(LoginData)).then((res) => {
+      if (res.type === "users/login/rejected") {
+        res.payload.errors.map((error, i) => {
+          return toast.error(error, {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+          });
+        });
+      }
+    });
   };
   return (
     <Box height={{ xs: "100%", md: "100vh" }}>
@@ -183,6 +197,7 @@ export const Login = () => {
           </Box>
         </Stack>
       </Stack>
+      <ToastContainer theme="colored" />
     </Box>
   );
 };

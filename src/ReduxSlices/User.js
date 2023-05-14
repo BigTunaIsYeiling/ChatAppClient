@@ -31,7 +31,6 @@ export const SetRegister = createAsyncThunk(
 
 export const SetLogout = createAsyncThunk(
   "users/logout",
-
   async (_, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
     try {

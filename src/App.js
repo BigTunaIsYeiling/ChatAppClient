@@ -11,6 +11,7 @@ import { getMessages } from "./ReduxSlices/MessagesSlice";
 import { UserId } from "./ReduxSlices/User";
 import { setActiveUsers } from "./ReduxSlices/UsersList";
 import { socket } from "./Socket";
+import { AddChat } from "./Components/AddChat";
 function App() {
   const user = useSelector(UserId);
   useEffect(() => {
@@ -56,6 +57,9 @@ function App() {
     return () => socket.off("receive-message", ReceiveHandler);
     // eslint-disable-next-line
   }, []);
+  useEffect(() => {
+    user && socket.emit("login", user);
+  }, [user]);
   return loaded ? (
     !isSigned ? (
       <Navigate to="register" />
@@ -73,7 +77,7 @@ function App() {
           }}
           direction={"row"}
         >
-          {/* <AddChat /> */}
+          <AddChat />
           <Stack
             direction={"column"}
             display={{ xs: "none", md: "flex" }}

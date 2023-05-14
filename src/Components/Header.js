@@ -19,6 +19,7 @@ import useWindowSize from "../UseWindowHook";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { SetLogout, userData } from "../ReduxSlices/User";
+import { socket } from "../Socket";
 export const Header = ({ setHeaderHeight }) => {
   const { fonts } = CustomTheme;
   const headRef = useRef();
@@ -124,6 +125,7 @@ export const Header = ({ setHeaderHeight }) => {
             <Divider />
             <MenuItem
               onClick={() => {
+                socket.emit("logout", user.id);
                 dispatch(SetLogout());
               }}
             >

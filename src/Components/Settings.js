@@ -17,6 +17,7 @@ import { BsArrow90DegLeft } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { RefreshAccess, UpdateUser, userData } from "../ReduxSlices/User";
 import DeleteUserDialog from "./DeleteUser";
+import { ToastContainer, toast } from "react-toastify";
 export const Settings = () => {
   const [showPass, setPass] = useState(false);
   const { fonts } = CustomTheme;
@@ -36,6 +37,14 @@ export const Settings = () => {
   const [password, setpassword] = useState("");
   const [file, setfile] = useState(null);
   const dispatch = useDispatch();
+  const [rev, setRev] = useState(null);
+  const setfilebase = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setRev(reader.result);
+    };
+  };
   return (
     <Box
       sx={{
@@ -99,18 +108,39 @@ export const Settings = () => {
             data.append("newAvatar", file);
             data.append("newUsername", username);
             data.append("newPassword", password);
-            dispatch(UpdateUser(data)).then(() => {
+            dispatch(UpdateUser(data)).then((data) => {
+              if (data.type === "users/update/rejected") {
+                data.payload.errors.map((error, i) => {
+                  return toast.error(error, {
+                    position: "bottom-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
+                });
+              }
               dispatch(RefreshAccess());
+              setRev(null);
             });
           }}
         >
           <Stack direction={"column"} alignItems={"center"}>
             <Box position={"relative"}>
-              <Avatar
-                alt="ad ads"
-                sx={{ width: 100, height: 100 }}
-                src={user.avatar}
-              />
+              {!rev ? (
+                <Avatar
+                  alt="ad ads"
+                  sx={{ width: 100, height: 100 }}
+                  src={user.avatar}
+                />
+              ) : (
+                <Avatar
+                  alt="ad ads"
+                  sx={{ width: 100, height: 100 }}
+                  src={rev}
+                />
+              )}
               <IconButton
                 sx={{
                   position: "absolute",
@@ -126,7 +156,10 @@ export const Settings = () => {
                 <input
                   hidden
                   type="file"
-                  onChange={(e) => setfile(e.target.files[0])}
+                  onChange={(e) => {
+                    setfile(e.target.files[0]);
+                    setfilebase(e.target.files[0]);
+                  }}
                 />
               </IconButton>
             </Box>
@@ -269,6 +302,7 @@ export const Settings = () => {
           </Button>
         </Stack>
       </Stack>
+      <ToastContainer theme="colored" />
     </Box>
   );
 };
