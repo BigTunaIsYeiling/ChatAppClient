@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 axios.defaults.withCredentials = true;
-const SERVER_URL = "http://localhost:5000";
+const SERVER_URL = "https://chatbtserver.onrender.com";
 
 const initialState = {
   messages: null,
