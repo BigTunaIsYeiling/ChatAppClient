@@ -11,6 +11,8 @@ import { getMessages } from "./ReduxSlices/MessagesSlice";
 import { UserId } from "./ReduxSlices/User";
 import { setActiveUsers } from "./ReduxSlices/UsersList";
 import { socket } from "./Socket";
+import Lottie from "lottie-react";
+import LoadingAni from "./Components/合成 1.json";
 function App() {
   const user = useSelector(UserId);
   useEffect(() => {
@@ -96,7 +98,7 @@ function App() {
       </Box>
     )
   ) : (
-    <div></div>
+    <Box component={Lottie} animationData={LoadingAni} style={{ width: "400px" }} />
   );
 }
 export default App;
