@@ -98,7 +98,13 @@ function App() {
       </Box>
     )
   ) : (
-    <Box component={Lottie} animationData={LoadingAni} style={{ width: "400px" }} />
+    <Stack direction={"row"} alignItems={"center"} justifyContent={"center"}>
+      <Box
+        component={Lottie}
+        animationData={LoadingAni}
+        style={{ width: "400px" }}
+      />
+    </Stack>
   );
 }
 export default App;
