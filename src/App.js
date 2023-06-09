@@ -98,7 +98,15 @@ function App() {
       </Box>
     )
   ) : (
-    <Stack direction={"row"} alignItems={"center"} justifyContent={"center"}>
+    <Stack
+      maxWidth={"100vw"}
+      direction={"row"}
+      alignItems={"center"}
+      justifyContent={"center"}
+      height={"100vh"}
+      maxHeight={"100vh"}
+      overflow={"hidden"}
+    >
       <Box
         component={Lottie}
         animationData={LoadingAni}
