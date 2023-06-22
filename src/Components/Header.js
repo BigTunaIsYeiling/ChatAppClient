@@ -18,7 +18,7 @@ import img from "../logo.png";
 import useWindowSize from "../UseWindowHook";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { SetLogout, userData } from "../ReduxSlices/User";
+import { RefreshAccess, SetLogout, userData } from "../ReduxSlices/User";
 import { socket } from "../Socket";
 export const Header = ({ setHeaderHeight }) => {
   const { fonts } = CustomTheme;
@@ -126,7 +126,9 @@ export const Header = ({ setHeaderHeight }) => {
             <MenuItem
               onClick={() => {
                 socket.emit("logout", user.id);
-                dispatch(SetLogout());
+                dispatch(SetLogout()).then(() => {
+                  dispatch(RefreshAccess());
+                });
               }}
             >
               <ListItemIcon>
