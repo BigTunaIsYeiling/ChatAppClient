@@ -13,6 +13,7 @@ import { setActiveUsers } from "./ReduxSlices/UsersList";
 import { socket } from "./Socket";
 import Lottie from "lottie-react";
 import LoadingAni from "./Components/合成 1.json";
+import { useNavigate } from "react-router-dom";
 function App() {
   const user = useSelector(UserId);
   useEffect(() => {
@@ -29,13 +30,14 @@ function App() {
   const isSigned = useSelector(isLoggedIn);
   const loaded = useSelector(isloading);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   // run refresh access on load and every 5 seconds
   useEffect(
     () => {
       dispatch(RefreshAccess());
       const interval = setInterval(() => {
         dispatch(RefreshAccess());
-      }, 5000);
+      }, 15000);
       return () => clearInterval(interval);
     },
     // eslint-disable-next-line
@@ -61,6 +63,19 @@ function App() {
   useEffect(() => {
     user && socket.emit("login", user);
   }, [user]);
+  // if loaded isn't true after 4 seconds navigate user to register route
+  useEffect(
+    () => {
+      if (!loaded) {
+        const timeout = setTimeout(() => {
+          navigate("/register");
+        }, 4000);
+        return () => clearTimeout(timeout);
+      }
+    },
+    // eslint-disable-next-line
+    [loaded]
+  );
   return loaded ? (
     !isSigned ? (
       <Navigate to="register" />

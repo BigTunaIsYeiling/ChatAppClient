@@ -36,7 +36,6 @@ const UsersListSlice = createSlice({
   reducers: {
     setActiveUsers: (state, action) => {
       state.ActiveUsers = action.payload;
-      console.log(state.ActiveUsers);
     },
   },
 });
