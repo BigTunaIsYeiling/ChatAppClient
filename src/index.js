@@ -12,7 +12,8 @@ import { SignUp } from "./Components/SignUp";
 import { Login } from "./Components/Login";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from "react-hot-toast";
 TimeAgo.addDefaultLocale(en);
 const router = createBrowserRouter([
   {
@@ -52,5 +53,6 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={Store}>
     <RouterProvider router={router} />
+    <Toaster />
   </Provider>
 );

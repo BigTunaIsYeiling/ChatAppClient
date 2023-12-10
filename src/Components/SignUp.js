@@ -7,7 +7,8 @@ import img from "../logo.png";
 import { NavLink } from "react-router-dom";
 import { SetRegister } from "../ReduxSlices/User";
 import { useDispatch } from "react-redux";
-import { ToastContainer, toast } from "react-toastify";
+import toast from "react-hot-toast";
+// import { ToastContainer, toast } from "react-toastify";
 export const SignUp = () => {
   const { fonts } = CustomTheme;
   const [showpass, setpassinp] = useState(false);
@@ -194,18 +195,11 @@ export const SignUp = () => {
             }}
             marginTop="3rem"
             onClick={() => {
+              const toastId = toast.loading("Loading...");
               dispatch(SetRegister(LoginData)).then((res) => {
+                toast.dismiss(toastId);
                 if (res.type === "users/register/rejected") {
-                  res.payload.errors.map((error, i) => {
-                    return toast.error(error, {
-                      position: "bottom-right",
-                      autoClose: 3000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      draggable: true,
-                      progress: undefined,
-                    });
-                  });
+                  res.payload.errors.map((error, i) => toast.error(error));
                 }
               });
             }}
@@ -230,7 +224,7 @@ export const SignUp = () => {
           </Box>
         </Stack>
       </Stack>
-      <ToastContainer theme="colored" />
+      {/* <ToastContainer theme="colored" /> */}
     </Box>
   );
 };
