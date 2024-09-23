@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 axios.defaults.withCredentials = true;
-const SERVER_URL = "https://chatbtserver.onrender.com";
+const SERVER_URL = "https://chatbt-production.up.railway.app";
 
 export const SetLogin = createAsyncThunk(
   "users/login",
